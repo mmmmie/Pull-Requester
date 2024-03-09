@@ -1,0 +1,2 @@
+networkx==3.1
+vectorshift==0.0.46
