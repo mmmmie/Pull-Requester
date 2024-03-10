@@ -23,12 +23,8 @@
     "https://api.vectorshift.ai/*"
   ],
   "permissions": [
-    "activeTab",
-    "tabs",
     "identity",
-    "storage",
-    "nativeMessaging",
-    "contextMenus"
+    "storage"
   ],
   "action": {
     "default_icon": "pull_requester.png"
