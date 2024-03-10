@@ -31,7 +31,6 @@
   "content_scripts": [
     {
       "js": [
-        "pull_request_generation/test.js",
         "chrome_extension/pr_page.js"
       ],
       "matches": [
