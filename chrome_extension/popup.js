@@ -8,19 +8,18 @@ function openOptions() {
     }
 }
 
-function startIt() {
+document.querySelector('#go-to-options').addEventListener('click', openOptions);
+
+document.getElementById('#authenticateButton').addEventListener('click', function () {
+    console.log("clicked");
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         console.log("querying tabs");
         console.log(tabs);
         if (tabs.length > 0) {
             console.log(tabs[0].url);
-            chrome.runtime.sendMessage('koknoffpbjalhgkpjhjohdhcoenjlnjp', {message: 'start it', url: tabs[0].url})
+            chrome.runtime.sendMessage(message = {message: 'start it', github_url: tabs[0].url})
         } else {
             console.log("no tabs");
         }
     })
-}
-
-document.querySelector('#go-to-options').addEventListener('click', openOptions);
-
-document.getElementById('#authenticateButton').addEventListener('click', startIt);
+});

@@ -1,8 +1,8 @@
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-        console.log("fklsdjlfkjakldfjalkjflkd:" + message.url);
-        if (message.message === 'start it') {
-            console.log(message.url);
-            let authorizing = chrome.identity.launchWebAuthFlow({
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+        console.log("fklsdjlfkjakldfjalkjflkd:" + request.github_url);
+        if (request.message === 'start it') {
+            console.log(request.github_url);
+            chrome.identity.launchWebAuthFlow({
                 url: 'https://github.com/login/oauth/authorize?client_id=5f10afd2b8c4a92d251e&redirect_uri=https://koknoffpbjalhgkpjhjohdhcoenjlnjp.chromiumapp.org/&scope=repo',
                 interactive: true
             }, function (redirect_url) {
@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                         }
                     }
                 ).then(data => {
-                    const github_url = message.url;
+                    const github_url = request.github_url;
                     console.log('github_url: ' + github_url);
                     const owner = github_url.split('/')[3];
                     const repo = github_url.split('/')[4];
