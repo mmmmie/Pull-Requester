@@ -1,0 +1,206 @@
+filename: api/author.py
+status: modified
+@@ -7,7 +7,7 @@
+ 
+ from api.concept import Concept, json_to_concept
+ from api.utils import json_to_multiple, make_request, url_to_id, loose_compare, make_search_string, generic_get_by_id, \
+-    generic_search
++    generic_search, ListWithMeta
+ 
+ from dotenv import load_dotenv
+ 
+@@ -134,8 +134,8 @@ async def search(filters_with_query: Union[Dict[Filter, str], Tuple[Filter, str]
+                  sorts_with_order: Union[Dict[Sort, bool], Tuple[Sort, bool]] = None,
+                  fields: Union[list[Field], Field] = None,
+                  page: int = 1,
+-                 per_page: int = 25,
+-                 session: aiohttp.ClientSession = None) -> list[Author]:
++                 per_page: int = 200,
++                 session: aiohttp.ClientSession = None) -> ListWithMeta[Author]:
+     """
+     Search authors by filters
+     :param filters_with_query: dictionary of filters with query strings; or a tuple of filter and query string
+@@ -145,7 +145,7 @@ async def search(filters_with_query: Union[Dict[Filter, str], Tuple[Filter, str]
+     :param page: page number, default is 1
+     :param per_page: number of items per page
+     :param session: aiohttp.ClientSession
+-    :return: list of author objects
++    :return: ListWithMeta of author objects and metadata
+     """
+     if fields is None:
+         fields = Field.DEHYDRATED
+ 
+filename: api/utils.py
+status: modified
+@@ -1,24 +1,33 @@
+ import asyncio
+-import time
+ from enum import Enum
+ from typing import Union, Dict, Tuple
+ 
+ import requests
+ import aiohttp
+ 
+ 
++class ListWithMeta(list):
++    def __init__(self, *args, meta=None, **kwargs):
++        super().__init__(*args, **kwargs)
++        self.count = meta.get('count')
++        self.page = meta.get('page')
++        self.per_page = meta.get('per_page')
++
++
+ def json_to_multiple(json, func):
+     """
+     Helper function to convert json to multiple objects
+     :param json: json to convert
+     :param func: function to convert json to object
+-    :return: list of objects
++    :return: a tuple of (objects, meta); objects is a list of objects;
++        meta is a dictionary with count(max number of results), page, and per_page
+     """
+     objects = []
+ 
+     if json is None:
+         return objects
+     else:
++        objects = ListWithMeta(meta=json.get('meta'))
+         for object_ in json['results']:
+             objects.append(func(object_))
+         return objects
+@@ -31,7 +40,7 @@ async def make_request(url: str, session: aiohttp.ClientSession):
+     :param url: url to make request to
+     :return: json response
+     """
+-    if session is None:
++    if session is None or not isinstance(session, aiohttp.ClientSession):
+         raise ValueError(
+             'Unable to make async request without aiohttp session.\n Talk to Kewei if you don\'t know how to fix this')
+     return await fetch_with_retry(url, session)
+@@ -102,6 +111,9 @@ async def generic_search(url: str,
+     if sorts_with_order is None:
+         sorts_with_order = {}
+ 
++    if per_page > 200:
++        raise ValueError(f'per_page must be less than or equal to 200, not {per_page}')
++
+     search_string = make_search_string(filters_with_query, sorts_with_order, fields, page, per_page)
+     return await make_request(f'{url}?{search_string}', session)
+ 
+@@ -149,24 +161,23 @@ def loose_compare(a, b):
+ 
+     return True
+ 
+-
+-async def main():
+-    tasks = []
+-    responses = []
+-
+-    session = aiohttp.ClientSession()
+-
+-    for i in range(30):
+-        tasks.append(fetch_with_retry('https://api.openalex.org/authors/A5023888391', session))
+-
+-    responses = await asyncio.gather(*tasks)
+-
+-    print(responses)
+-
+-    await session.close()
+-
+-
+-if __name__ == "__main__":
+-    start = time.time()
+-    asyncio.run(main())
+-    print(f"Time taken: {time.time() - start}")
++# import time
++# async def main():
++#     tasks = []
++#     responses = []
++#
++#     session = aiohttp.ClientSession()
++#
++#     for i in range(30):
++#         tasks.append(fetch_with_retry('https://api.openalex.org/authors/A5023888391', session))
++#
++#     responses = await asyncio.gather(*tasks)
++#
++#     print(responses)
++#
++#     await session.close()
++#
++#
++# start = time.time()
++# asyncio.run(main())
++# print(f"Time taken: {time.time() - start}")
+ 
+filename: api/work.py
+status: modified
+@@ -5,7 +5,7 @@
+ 
+ from typing import List, Dict, Union
+ from api.utils import json_to_multiple, make_request, url_to_id, loose_compare, make_search_string, generic_search, \
+-    generic_get_by_id
++    generic_get_by_id, ListWithMeta
+ 
+ 
+ class Position(Enum):
+@@ -264,17 +264,18 @@ def get_attributes(cls) -> list[str]:
+ async def search(filters_with_query: Union[Dict[Filter, str], (Filter, str)] = None,
+                  sorts_with_order: Union[Dict[Sort, bool], (Sort, bool)] = None,
+                  fields: Union[list[Field], Field] = None,
+-                 page: int = 1, per_page: int = 25,
+-                 session: aiohttp.ClientSession = None) -> list[Work]:
++                 page: int = 1, per_page: int = 200,
++                 session: aiohttp.ClientSession = None) -> ListWithMeta[Work]:
+     """
+     Search works by filters
+     :param filters_with_query: dictionary of filters with query strings; or a tuple of filter and query string
+     :param sorts_with_order: dictionary of sorts with order, True for ascending, False for descending; or a tuple of
+     sort and order
+     :param fields: list of fields to select; or a single field
+     :param page: page number, default is 1
++    :param per_page: number of items per page
+     :param session: aiohttp session
+-    :return: list of works objects
++    :return: ListWithMeta of work objects and metadata
+     """
+     if fields is None:
+         fields = Field.DEHYDRATED
+@@ -296,30 +297,30 @@ async def get_by_id(id_: str, fields: Union[list[Field], Field] = None,
+     return json_to_work(await generic_get_by_id(url, id_, fields, session))
+ 
+ 
+-async def get_referenced_works(id_: str, page: int = 1, per_page: int = 25,
+-                               session: aiohttp.ClientSession = None) -> list[Work]:
++async def get_referenced_works(id_: str, page: int = 1, per_page: int = 200,
++                               session: aiohttp.ClientSession = None) -> ListWithMeta[Work]:
+     """
+     Get works referenced by this work
+     :param id_: id of work
+     :param page: page number, default is 1
+     :param per_page: number of items per page
+     :param session: aiohttp session
+-    :return: list of works
++    :return: ListWithMeta of work objects and metadata
+     """
+     return await search({Filter.CITED_BY: id_}, None, None, page, per_page, session=session)
+     # return json_to_works(
+     #     await make_request(f'{url}?filter=cited_by:{id_}&select={Field.DEHYDRATED.value}&page={page}', session))
+ 
+ 
+-async def get_cited_by_works(id_: str, page: int = 1, per_page: int = 25,
+-                             session: aiohttp.ClientSession = None) -> list[Work]:
++async def get_cited_by_works(id_: str, page: int = 1, per_page: int = 200,
++                             session: aiohttp.ClientSession = None) -> ListWithMeta[Work]:
+     """
+     Get works that cite this work
+     :param id_: id of work
+     :param page: page number, default is 1
+     :param per_page: number of items per page
+     :param session: aiohttp session
+-    :return: list of works
++    :return: ListWithMeta of work objects and metadata
+     """
+     return await search({Filter.CITES: id_}, None, None, page, per_page, session=session)
+     # return json_to_works(
+ 
