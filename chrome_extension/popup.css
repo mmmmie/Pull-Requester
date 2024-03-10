@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background-color: #1f2328;
+}
+
+.buttonCont {
+    position: relative;
+}
+
+.icon {
+    height: 50px;
+    width: 50px;
+}
+
+.btn {
+    border-radius: 50%; /* Make it circular */
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    font-family: "Segoe UI", "DejaVu Sans Mono", sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out; /* Smooth transition for all changes */
+    padding: 10px; /* Adjust padding to scale the size of the circular button */
+    width: 50px; /* Fixed width */
+    height: 50px; /* Fixed height */
+    overflow: hidden; /* Hide the text initially */
+}
+
+.btn .icon {
+    display: block;
+}
+
+.btn .btnText {
+    display: none; /* Hide the text by default */
+    white-space: nowrap; /* Ensure the text does not wrap */
+}
+
+.btn:hover {
+    border-radius: 5px; /* Return to the initial border-radius */
+    transform: scaleX(1.4);
+     /* Allow the button to expand to fit its content */
+    padding: 5px 10px; /* Adjust padding to match the original button's padding */
+}
+
+.btn:hover .btnText {
+    display: inline; /* Show the text on hover */
+}

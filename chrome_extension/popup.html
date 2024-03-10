@@ -1,12 +1,79 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Pull Requester</title>
+    <style>
+        body {
+            margin: 0;
+            width: 300px;
+            height: 300px; /* Adjust height if necessary */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Centering the content horizontally */
+            background-color: #1f2328;
+        }
 
+        .btn-container {
+            position: relative;
+            width: 50px; /* Initial size of the button */
+            height: 50px; /* Initial size of the button */
+        }
+
+        .btn {
+            border-radius: 50%; /* Makes the button circular */
+            background-color: #1f2328;
+            color: #ffffff;
+            border: none;
+            font-family: "Segoe UI", "DejaVu Sans Mono", sans-serif;
+            text-align: center;
+            cursor: pointer;
+            transition: width 0.3s ease, border-radius 0.3s ease, padding 0.3s ease;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Ensures that content does not overflow during transition */
+            content: url('../github-mark.png');
+        }
+
+        /* Hover effect */
+        .btn-container:hover .btn {
+            background-color: #2f3a3e;
+        }
+
+        /* Hides the icon and shows the text on hover */
+        .btn-container:hover .btn:before {
+            display: none;
+        }
+
+        .btn-text {
+            display: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-container:hover .btn-text {
+            display: block;
+        }
+
+
+
+    </style>
 </head>
-
 <body>
-    <button id="authenticateButton">Authenticate</button>
+
+    <h1 class="title">Let Me Cook</h1>
+    <button id="go-to-options">Options</button>
+    <div class="btn-container">
+        <button class="btn" id="authenticateButton">
+            <span class="btn-text">Log in with GitHub</span>
+        </button>
+    </div>
+
+
     <script src="popup.js"></script>
 </body>
 </html>

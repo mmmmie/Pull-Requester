@@ -20,13 +20,27 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                             throw new Error('Network response was not ok.');
                         }
                     }
-                ) // Parse the JSON response
-                    .then(data => {
-                        console.log(data);
-                    })
+                ).then(data => {
+                    const url = request.url;
+                    const owner = url.split('/')[1];
+                    const repo = url.split('/')[2];
+                    const base_head = url.split('/')[4];
+                    const base = base_head.split('...')[0];
+                    const head = base_head.split('...')[1];
+                    const token = data.access_token;
+                    ///////////////////////////////// generate
+                    // console.log('Owner: ' + owner);
+                    // console.log('Repo: ' + repo);
+                    // console.log('Base: ' + base);
+                    // console.log('Head: ' + head);
+                    // console.log('Token: ' + token);
+                    generatePullRequest(owner, repo, base, head, token)
+                        .then(res => console.log(res));
+                })
                     .catch(error => console.error('Error:', error));
             });
         }
     }
 )
 ;
+
