@@ -1,55 +1,18 @@
-import { Octokit } from "@octokit/rest";
-
-const formatData = (data) => {
-    let files = data.files;
-    // console.log(files);
-    let fileData = files.filter(file => !file.filename.includes('test')).map(file => {
-        return {
-            filename: file.filename,
-            status: file.status,
-            patch: file.patch
-        }
-    });
-    let diff_string = '';
-    fileData.forEach(file => {
-        diff_string += `Filename: ${file.filename}\nStatus: ${file.status}\nPatch: ${file.patch}\n\n`;
-    });
-    return diff_string;
-};
-
-async function fetchBranchDiff(owner, repo, base, head, token) {
-    try {
-        const octokit = new Octokit({
-            auth: token // Access the token from environment variable
-        });
-        const response = await octokit.request('GET /repos/{owner}/{repo}/compare/{base}...{head}', {
-            owner: owner,
-            repo: repo,
-            base: base,
-            head: head
-        });
-        return formatData(response.data);
-    } catch (error) {
-        console.error('Error fetching branch diff:', error.message);
-        throw error;
-    }
-}
-
 const url = "https://api.vectorshift.ai/api/pipelines/run";
 const headers = {
-  "Public-Key": "be3L3F1W_Yogqab-EdiRYq0VBQPcAhTxw9waGP5SZEE",
-  "Private-Key": "QBtTGoNgQz7DY5gKBBzX4D5xFoxCE8p17RNz_BELNew",
-  "Content-Type": "application/json"
+    "Public-Key": "be3L3F1W_Yogqab-EdiRYq0VBQPcAhTxw9waGP5SZEE",
+    "Private-Key": "QBtTGoNgQz7DY5gKBBzX4D5xFoxCE8p17RNz_BELNew",
+    "Content-Type": "application/json"
 };
 
-export default async function generatePullRequest(owner, repo, base, head, token) {
+async function generatePullRequest(owner, repo, base, head, token) {
     const diff = await fetchBranchDiff(owner, repo, base, head, token);
 
     const body = {
         inputs: JSON.stringify({diff: `"${diff}"`}),
         pipeline_name: "Pull Request Generator",
         username: "fetusslave",
-      };
+    };
 
     const response = await fetch(url, {
         method: 'POST',

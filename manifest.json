@@ -3,9 +3,6 @@
   "name": "Pull Requester",
   "description": "I want your data",
   "version": "1.0",
-  "action": {
-    "default_popup": "chrome_extension/popup.html"
-  },
   "content_security_policy": {
     "script-src": [
       "'self'",
@@ -25,18 +22,10 @@
   ],
   "permissions": [
     "activeTab",
+    "tabs",
     "identity",
-    "storage"
-  ],
-  "content_scripts": [
-    {
-      "js": [
-        "chrome_extension/pr_page.js"
-      ],
-      "matches": [
-        "https://github.com/*/*/compare/*"
-      ]
-    }
+    "storage",
+    "nativeMessaging"
   ],
   "oauth2": {
     "client_id": "5f10afd2b8c4a92d251e",
@@ -45,7 +34,21 @@
     ]
   },
   "background": {
-    "service_worker": "chrome_extension/background.js",
-    "type": "module"
-  }
+    "service_workers": [
+      "chrome_extension/background.js"
+    ]
+  },
+  "action": {
+    "default_popup": "chrome_extension/popup.html"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "chrome_extension/pr_page.js"
+      ],
+      "matches": [
+        "https://github.com/*"
+      ]
+    }
+  ]
 }
