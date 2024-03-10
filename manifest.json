@@ -1,25 +1,33 @@
 {
   "manifest_version": 3,
-  "name": "This is so crazyyyy",
-  "description": "Base Level Extension",
+  "name": "Pull Requester",
+  "description": "I want your data",
   "version": "1.0",
   "action": {
-    "default_popup": "pull_requester.html",
-    "default_icon": "logo.png"
+    "default_popup": "chrome_extension/popup.html"
   },
-
-  "permissions": ["storage", "identity", "activeTab"],
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
-
+  "host_permissions": [
+    "https://*.github.com/"
+  ],
+  "permissions": [
+    "activeTab",
+    "identity"
+  ],
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
-      "matches": [
-        "https://github.com/*"
+      "matches" : [
+        "https://github.com/*",
       ]
     }
-  ]
+  ],
+  "oauth2": {
+    "client_id": "5f10afd2b8c4a92d251e",
+    "scopes": [
+        "repo"
+    ]
+  },
+    "background": {
+        "service_worker": "chrome_extension/background.js"
+    }
 }
