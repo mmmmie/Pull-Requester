@@ -1,3 +1,226 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pull Requester</title>
+    <style>
+        body {
+            margin: 0;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #1f2328;
+        }
+
+        .options-btn {
+            margin-bottom: 10px; /* Add margin to separate from other elements */
+        }
+
+        .btn-container {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
+            margin-bottom: 10px; /* Add margin to separate from other elements */
+        }
+
+        .btn {
+            border-radius: 50%;
+            background-color: #377acd;
+            color: #120101;
+            border: none;
+            font-family: "Segoe UI", "DejaVu Sans Mono", sans-serif;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative; /* Add position relative */
+            content: url('../github-mark.png');
+
+        }
+
+        .btn::before {
+            content: url('../github-mark.png');
+            position: absolute;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Center the icon */
+            z-index: 1; /* Ensure the icon is above the info panel */
+            transition: opacity 0.3s ease;
+        }
+
+        /* New info panel that appears on hover */
+        .info-panel {
+            display: none; /* Hidden initially */
+            position: absolute;
+            top: calc(100% + 10px); /* Position below the button with margin */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center the panel */
+            background-color: #3e372f; /* Background color of the panel */
+            color: #fff; /* Text color */
+            padding: 10px;
+            border-radius: 10px;
+            width: 150px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 2; /* Ensure the panel is above the button */
+        }
+
+        .btn-container:hover .info-panel {
+            display: block; /* Show the panel on hover */
+        }
+
+        .btn-container:hover .btn::before {
+            opacity: 0; /* Hide the GitHub icon on hover */
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 class="title">Let Me Cook</h1>
+    <button class="options-btn" id="go-to-options">Options</button>
+    <div class="btn-container">
+        <button class="btn" id="authenticateButton">
+            <span class="btn-text">Log in with GitHub</span>
+        </button>
+        <div class="info-panel">
+            Connect with GitHub to save your preferences.
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pull Requester</title>
+    <style>
+        body {
+            margin: 0;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #1f2328;
+            font-family: Arial, sans-serif;
+        }
+
+        .options-btn {
+            margin-bottom: 15px;
+            background-color: #2f3a3e;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .options-btn:hover {
+            background-color: #4a5a5f;
+        }
+
+        .btn-container {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            border-radius: 50%;
+            background-color: #377acd;
+            color: #ffffff;
+            border: none;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            content: url('../github-mark.png');
+
+        }
+
+        .btn::before {
+            content: url('../github-mark.png');
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #305cbf;
+        }
+
+        .info-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3e372f;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            width: 150px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-container:hover .info-panel {
+            display: block;
+            opacity: 1;
+        }
+
+        .btn-container:hover .btn::before {
+            opacity: 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 class="title">Let Me Cook</h1>
+    <button class="options-btn" id="go-to-options">Options</button>
+    <div class="btn-container">
+        <button class="btn" id="authenticateButton">
+            <span class="btn-text">Log in with GitHub</span>
+        </button>
+        <div class="info-panel">
+            Connect with GitHub to save your preferences.
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,72 +230,122 @@
         body {
             margin: 0;
             width: 300px;
-            height: 300px; /* Adjust height if necessary */
+            height: 300px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center; /* Centering the content horizontally */
+            align-items: center;
             background-color: #1f2328;
+        }
+
+
+        .header {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .options-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #2f3a3e;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .options-btn:hover {
+            background-color: #4a5a5f;
         }
 
         .btn-container {
             position: relative;
-            width: 50px; /* Initial size of the button */
-            height: 50px; /* Initial size of the button */
+            width: 50px;
+            height: 50px;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
         }
 
         .btn {
-            border-radius: 50%; /* Makes the button circular */
-            background-color: #1f2328;
+            border-radius: 50%;
+            background-color: #377acd;
             color: #ffffff;
             border: none;
-            font-family: "Segoe UI", "DejaVu Sans Mono", sans-serif;
-            text-align: center;
-            cursor: pointer;
-            transition: width 0.3s ease, border-radius 0.3s ease, padding 0.3s ease;
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Ensures that content does not overflow during transition */
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
             content: url('../github-mark.png');
+
         }
 
-        /* Hover effect */
-        .btn-container:hover .btn {
-            background-color: #2f3a3e;
+        .btn::before {
+            content: url('../github-mark.png');
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: opacity 0.3s ease;
         }
 
-        /* Hides the icon and shows the text on hover */
-        .btn-container:hover .btn:before {
+        .btn:hover {
+            background-color: #305cbf;
+        }
+
+        .info-panel {
             display: none;
-        }
-
-        .btn-text {
-            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3e372f;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            width: 150px;
+            text-align: center;
             font-weight: bold;
             font-size: 14px;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .btn-container:hover .btn-text {
+        .btn-container:hover .info-panel {
             display: block;
+            opacity: 1;
         }
 
-
+        .btn-container:hover .btn::before {
+            opacity: 0;
+        }
 
     </style>
 </head>
 <body>
 
-    <h1 class="title">Let Me Cook</h1>
-    <button id="go-to-options">Options</button>
+    <h1 class="header">Let Me Cook</h1>
+    <button class="options-btn" id="go-to-options">Options</button>
     <div class="btn-container">
         <button class="btn" id="#authenticateButton">
             <span class="btn-text">Log in with GitHub</span>
         </button>
+        <div class="info-panel">
+            Connect with GitHub to save your preferences.
+        </div>
     </div>
-
 
     <script src="popup.js"></script>
 </body>
