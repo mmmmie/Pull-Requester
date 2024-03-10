@@ -1,4 +1,6 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(
+
+(function (request, sender, sendResponse) {
         console.log("fklsdjlfkjakldfjalkjflkd:" + request.github_url);
         if (request.message === 'start it') {
             console.log(request.github_url);
@@ -49,6 +51,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
         return true;
     }
-)
+))
 ;
 

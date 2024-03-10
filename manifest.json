@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Pull Requester",
-  "description": "I want your data",
+  "description": "I write pull request for you, and I am 1 MB",
   "version": "1.0",
   "content_security_policy": {
     "script-src": [
@@ -31,7 +31,6 @@
     "contextMenus"
   ],
   "action": {
-    "default_popup": "chrome_extension_2/popup.html",
     "default_icon": "pull_requester.png"
   },
   "oauth2": {
@@ -40,17 +39,17 @@
       "repo"
     ]
   },
+  "background": {
+    "service_worker": "chrome_extension_2/background.js"
+  },
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*"
+        "https://github.com/*/*/compare/*"
       ],
       "js": [
         "chrome_extension_2/content.js"
       ]
     }
-  ],
-  "background": {
-    "service_worker": "chrome_extension_2/background.js"
-  }
+  ]
 }

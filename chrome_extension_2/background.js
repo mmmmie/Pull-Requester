@@ -66,38 +66,38 @@ async function generatePullRequest(owner, repo, base, head, token) {
     return responseData.output_1;
 }
 
-function triggerUpdatePRDescription(data) {
-    console.log("trying to trigger pr description update");
-
-}
-
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message);
     if (message.action === 'fetchBranchDiff') {
-        const url = message.url;
         chrome.identity.launchWebAuthFlow({
-            url: 'https://github.com/login/oauth/authorize?client_id=5f10afd2b8c4a92d251e&redirect_uri=https://koknoffpbjalhgkpjhjohdhcoenjlnjp.chromiumapp.org/&scope=repo',
-            interactive: true
-        }, function (redirect_url) {
+            url: 'https://github.com/login/oauth/authorize?client_id=792dd0a8f93a68c98c10&redirect_uri=https://koknoffpbjalhgkpjhjohdhcoenjlnjp.chromiumapp.org/&scope=repo',
+            interactive: true,
+            abortOnLoadForNonInteractive: false,
+            timeoutMsForNonInteractive: 1000
+        }, (redirect_url) => {
+            console.log(redirect_url);
             let code = redirect_url.split('code=')[1];
-            fetch('https://github.com/login/oauth/access_token?client_id=5f10afd2b8c4a92d251e&client_secret=a88514c938127668965ecb88ee36d97a437c21bd&code=' + code, {
+            console.log(code);
+
+            fetch('https://github.com/login/oauth/access_token?client_id=792dd0a8f93a68c98c10&client_secret=c5a97ba6bb57666f51e6d9a9470a473f1688e507&code=' + code, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json'
                 }
             }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok.');
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok.');
+                    }
                 }
-            }).then(data => data.access_token)
+            ).then(data => data.access_token)
                 .then(token => {
                     const github_url = message.url;
-                    const owner = github_url.split('/')[3];
-                    const repo = github_url.split('/')[4];
-                    const base_head = github_url.split('/')[6];
+                    const owner = github_url.split('/')[1];
+                    const repo = github_url.split('/')[2];
+                    const base_head = github_url.split('/')[4];
                     const base = base_head.split('...')[0];
                     const head = base_head.split('...')[1];
                     console.log(github_url, owner, repo, base, head, token);
@@ -110,15 +110,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     };
                     return data2;
                 }).then(data => {
-                    generatePullRequest(data.owner, data.repo, data.base, data.head, data.token)
-                        .then(res => {
-                            console.log(res);
-                            triggerUpdatePRDescription(res)
-                        })
-                        .catch(err => console.error(err));
+                return generatePullRequest(data.owner, data.repo, data.base, data.head, data.token)
+            }).then(res => {
+                console.log(res);
+                sendResponse({data: res});
             })
-        })
+        });
         return true;
+
     }
     return false;
 });
