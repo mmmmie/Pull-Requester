@@ -40,7 +40,7 @@
     ]
   },
   "background": {
-    "service_worker": "chrome_extension_2/background.js"
+    "service_worker": "chrome_extension/background.js"
   },
   "content_scripts": [
     {
@@ -48,7 +48,7 @@
         "https://github.com/*/*/compare/*"
       ],
       "js": [
-        "chrome_extension_2/content.js"
+        "chrome_extension/content.js"
       ]
     }
   ]
